@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Firekast Demo</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_streamer">Streamer</string>
+    <string name="title_player">Player</string>
+    <string name="start_streaming">Start streaming</string>
+    <string name="stop_streaming">Stop streaming</string>
 </resources>
