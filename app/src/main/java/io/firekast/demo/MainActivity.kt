@@ -2,7 +2,6 @@ package io.firekast.demo
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_player -> {
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, Fragment())
+                        .replace(R.id.fragmentContainer, PlayerFragment())
                         .commit()
                 return@OnNavigationItemSelectedListener true
             }

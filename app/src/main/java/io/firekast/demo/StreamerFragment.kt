@@ -9,6 +9,8 @@ import android.widget.Toast
 import io.firekast.*
 import kotlinx.android.synthetic.main.fragment_streamer.*
 
+var gLatestStream: FKStream? = null
+
 class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingCallback {
 
     private val sTAG = "StreamerFragment"
@@ -25,7 +27,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
     var isStreaming: Boolean by observing(false, didSet = {
         button.setText(if (isStreaming) R.string.stop_streaming else R.string.start_streaming)
     })
-    
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_streamer, container, false)
     }
@@ -79,6 +81,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
             Toast.makeText(this.context, "Error: $error", Toast.LENGTH_LONG).show()
             return
         }
+        gLatestStream = stream
         isStreaming = true
     }
 
