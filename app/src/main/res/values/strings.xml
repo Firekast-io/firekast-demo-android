@@ -6,4 +6,5 @@
     <string name="stop_streaming">Stop streaming</string>
     <string name="stop_playing">Stop</string>
     <string name="start_playing">Play</string>
+    <string name="stream_id">StreamID: %s</string>
 </resources>

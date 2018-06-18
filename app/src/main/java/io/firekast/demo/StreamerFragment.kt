@@ -77,6 +77,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
 
     override fun onSteamWillStartUnless(stream: FKStream?, error: FKError?) {
         isLoading = false
+        stream?.let { textViewStreamId.text = getString(R.string.stream_id, it.id) }
         if (error != null) {
             Toast.makeText(this.context, "Error: $error", Toast.LENGTH_LONG).show()
             return
@@ -86,7 +87,8 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
     }
 
     override fun onStreamDidStop(stream: FKStream?, error: FKError?) {
-        Toast.makeText(this.context, "Error: $error", Toast.LENGTH_LONG).show()
+        textViewStreamId.text = ""
+        error?.let { Toast.makeText(this.context, "Error: $error", Toast.LENGTH_LONG).show() }
         isLoading = false
         isStreaming = false
     }
