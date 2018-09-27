@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.android.exoplayer2.ui.PlayerView
 import io.firekast.FKError
 import io.firekast.FKPlayerView
 import io.firekast.FKStream
+import io.firekast.demo.R.id.videoView
 import kotlinx.android.synthetic.main.fragment_player.*
 
 class PlayerFragment : Fragment(), View.OnClickListener, FKPlayerView.Callback {
@@ -31,6 +33,7 @@ class PlayerFragment : Fragment(), View.OnClickListener, FKPlayerView.Callback {
         button.setOnClickListener(this)
         editText.setText(if (gLatestStream != null) gLatestStream!!.id else "")
         videoView.setPlayerListener(this)
+//        videoView.exoPlayerView.useController = false
         isLoading = false
         isPlaying = false
     }
