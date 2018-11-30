@@ -2,6 +2,7 @@ package io.firekast.demo
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,5 +63,9 @@ class PlayerFragment : Fragment(), View.OnClickListener, FKPlayerView.Callback {
             return
         }
         isPlaying = true
+    }
+
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        Log.v("$this", "onPlayerStateChanged newState: $playbackState")
     }
 }
