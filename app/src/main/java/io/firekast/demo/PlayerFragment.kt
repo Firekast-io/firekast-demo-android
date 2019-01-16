@@ -2,28 +2,19 @@ package io.firekast.demo
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.exoplayer2.ui.PlayerView
 import io.firekast.FKError
-import io.firekast.FKPlayerView
+import io.firekast.FKPlayer
 import io.firekast.FKStream
-import io.firekast.demo.R.id.videoView
 import kotlinx.android.synthetic.main.fragment_player.*
 
-class PlayerFragment : Fragment(), View.OnClickListener, FKPlayerView.Callback {
+class PlayerFragment : Fragment(), FKPlayer.Callback {
 
-    var isLoading: Boolean by observing(false, didSet = {
-        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        button.isEnabled = !isLoading
-    })
-
-    var isPlaying: Boolean by observing(false, didSet = {
-        button.setText(if (isPlaying) R.string.stop_playing else R.string.start_playing)
-    })
+    private lateinit var player: FKPlayer
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_player, container, false)
@@ -31,41 +22,58 @@ class PlayerFragment : Fragment(), View.OnClickListener, FKPlayerView.Callback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button.setOnClickListener(this)
-        editText.setText(if (gLatestStream != null) gLatestStream!!.id else "")
-        videoView.setPlayerListener(this)
-//        videoView.exoPlayerView.useController = false
-        isLoading = false
-        isPlaying = false
+
+        editText.setText(gLatestStream?.id)
+        progressBar.visibility = View.GONE
+        buttonPlay.setOnClickListener(onClickPlayButton)
+        buttonPause.setOnClickListener(onClickPauseButton)
+        buttonResume.setOnClickListener(onClickResumeButton)
+
+        player = playerView.player
+        player.setCallback(this)
     }
 
-    override fun onClick(p0: View?) {
-        if (isPlaying) {
-            videoView.stop()
-            isLoading = false
-            isPlaying = false
-            return
-        }
-        val streamId = editText.text.trim()
-        if (streamId.isEmpty()) {
-            editText.error = "Fill a stream ID"
-            return
-        }
-        isLoading = true
-        videoView.play(streamId.toString())
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
     }
 
-    override fun onPlayerWillPlay(stream: FKStream?, error: FKError?) {
-        isLoading = false
-        if (error != null) {
-            isPlaying = false
-            Toast.makeText(this.context, "Error: $error", Toast.LENGTH_SHORT).show()
-            return
+    private val onClickPlayButton = View.OnClickListener {
+        progressBar.visibility = View.VISIBLE
+        val streamId = editText.text.toString().trim()
+        val current = player.currentStream
+        if (TextUtils.isEmpty(streamId)) {
+            editText.error = "StreamId needed here."
+        } else if (current == null || current.id != streamId) {
+            // no stream playing yet or wants to play another stream
+            val stream = FKStream.newEmptyInstance(streamId)
+            player.play(stream)
+        } else {
+            // restart the stream from the beginning
+            player.play(current)
         }
-        isPlaying = true
     }
 
-    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-        Log.v("$this", "onPlayerStateChanged newState: $playbackState")
+    private val onClickPauseButton = View.OnClickListener {
+        player.pause()
+    }
+
+    private val onClickResumeButton = View.OnClickListener {
+        player.resume()
+    }
+
+    // -----
+    // FKPlayerCallback
+    // -----
+
+    override fun onPlayerWillPlay(stream: FKStream, error: FKError?) {
+        progressBar.visibility = View.GONE
+        error?.let {
+            Toast.makeText(this.context, "Error: $it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onPlayerStateChanged(state: FKPlayer.State) {
+        textViewState.text = "$state"
     }
 }

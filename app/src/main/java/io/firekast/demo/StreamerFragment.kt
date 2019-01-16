@@ -27,11 +27,11 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
 
     var isLoading: Boolean by observing(false, didSet = {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        button.isEnabled = !isLoading
+        buttonResume.isEnabled = !isLoading
     })
 
     var isStreaming: Boolean by observing(false, didSet = {
-        button.setText(if (isStreaming) R.string.stop_streaming else R.string.start_streaming)
+        buttonResume.setText(if (isStreaming) R.string.stop_streaming else R.string.start_streaming)
     })
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,7 +47,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
         cameraFragment.getCameraAsync { camera, streamer, error ->
             if (error != null) {
                 Toast.makeText(view.context, "Error: $error", Toast.LENGTH_LONG).show()
-                button.isEnabled = false
+                buttonResume.isEnabled = false
                 return@getCameraAsync
             }
             this.camera = camera!!
@@ -58,7 +58,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
                 .add(R.id.fragmentContainer, cameraFragment)
                 .commit()
 
-        button.setOnClickListener(this)
+        buttonResume.setOnClickListener(this)
 
         streamStateViewHolder = StreamStateViewHolder(blockStreamState)
         streamStateViewHolder.visibility = View.INVISIBLE
