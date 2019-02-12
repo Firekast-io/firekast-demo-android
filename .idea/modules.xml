@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appjava/appjava.iml" filepath="$PROJECT_DIR$/appjava/appjava.iml" />
       <module fileurl="file://$PROJECT_DIR$/firekast-demo-android.iml" filepath="$PROJECT_DIR$/firekast-demo-android.iml" />
     </modules>
   </component>

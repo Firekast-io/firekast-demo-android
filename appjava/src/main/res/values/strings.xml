@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Firekast Java</string>
+    <string name="title_streamer">Streamer</string>
+    <string name="title_player">Player</string>
+    <string name="streaming_start">Start</string>
+    <string name="streaming_stop">Stop</string>
+</resources>
