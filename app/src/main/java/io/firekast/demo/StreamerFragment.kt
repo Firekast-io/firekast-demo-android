@@ -72,11 +72,11 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
             isStreaming = false
         } else {
             isLoading = true
-            streamer.requestStream { stream: FKStream?, error: FKError? ->
+            streamer.createStream { stream: FKStream?, error: FKError? ->
                 if (error != null) {
                     Toast.makeText(this.context, "Error: $error", Toast.LENGTH_LONG).show()
                     isLoading = false
-                    return@requestStream
+                    return@createStream
                 }
                 streamer.startStreaming(stream!!, this)
             }
@@ -108,7 +108,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
         isStreaming = false
     }
 
-    override fun onStreamingUpdateAvailable(p0: Boolean) {
+    override fun onStreamHealthDidUpdate(freezing: Boolean, health: Float) {
     }
 
 }

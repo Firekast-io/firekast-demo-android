@@ -90,7 +90,7 @@ public class StreamerFragment extends Fragment implements View.OnClickListener, 
         mIsCreatingStream = true;
         updateUI();
         // First request a stream
-        mStreamer.requestStream(new FKStreamer.RequestStreamCallback() {
+        mStreamer.createStream(new FKStreamer.CreateStreamCallback() {
             @Override
             public void done(@Nullable FKStream stream, @Nullable FKError error) {
                 mIsCreatingStream = false;
@@ -151,7 +151,7 @@ public class StreamerFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onStreamingUpdateAvailable(boolean lag) {
+    public void onStreamHealthDidUpdate(boolean freezing, float health) {
 
     }
 

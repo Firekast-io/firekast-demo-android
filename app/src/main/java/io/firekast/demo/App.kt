@@ -9,7 +9,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Firekast.setLogLevel(Log.VERBOSE)
-        Firekast.initialize(this, "YOUR_CLIENT_KEY", "YOUR_APPLICATION_ID")
+        Firekast.initialize(this, "YOUR_APP_PRIVATE_KEY")
     }
 
 }

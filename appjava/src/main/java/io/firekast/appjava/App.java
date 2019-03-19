@@ -13,6 +13,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Firekast.initialize(this, "YOUR_CLIENT_KEY", "YOUR_APPLICATION_ID");
+        Firekast.initialize(this, "YOUR_APP_PRIVATE_KEY");
     }
 }
