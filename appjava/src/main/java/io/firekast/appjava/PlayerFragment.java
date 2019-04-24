@@ -57,7 +57,7 @@ public class PlayerFragment extends Fragment implements FKPlayer.Callback, View.
         mPlayer.setCallback(this);
         mPlayer.setShowPlaybackControls(true);
         mEditTextUrl.setHint("Stream id (ex. H1N_D8eex)");
-        mEditTextUrl.setText(App.latestStreamId == null ? "bhcb7k9d5fbbielgw" : App.latestStreamId);
+        mEditTextUrl.setText(App.latestStreamId);
         mTextViewState.setText("" + mPlayer.getState());
     }
 
@@ -133,7 +133,7 @@ public class PlayerFragment extends Fragment implements FKPlayer.Callback, View.
     // --------
 
     @Override
-    public void onPlayerWillPlay(@NonNull FKStream stream, @Nullable FKError error) {
+    public void onPlayerWillPlay(@NonNull FKPlayer player, @NonNull FKStream stream, @Nullable FKError error) {
         Log.v(TAG, "onPlayerWillPlay: stream " + stream + " unless error: " + error);
         if (error != null) {
             Toast.makeText(getContext(), "FKError: " + error, Toast.LENGTH_LONG).show();
@@ -142,7 +142,7 @@ public class PlayerFragment extends Fragment implements FKPlayer.Callback, View.
     }
 
     @Override
-    public void onPlayerStateChanged(FKPlayer.State state) {
+    public void onPlayerStateChanged(@NonNull FKPlayer player, FKPlayer.State state) {
         Log.v(TAG, "onPlayerStateChanged: " + state);
         mTextViewState.setText("" + mPlayer.getState());
     }

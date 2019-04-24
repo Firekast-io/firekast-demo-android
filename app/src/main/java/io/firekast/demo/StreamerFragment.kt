@@ -13,8 +13,6 @@ import android.widget.Toast
 import io.firekast.*
 import kotlinx.android.synthetic.main.fragment_streamer.*
 
-var gLatestStream: FKStream? = null
-
 class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingCallback {
 
     private val sTAG = "StreamerFragment"

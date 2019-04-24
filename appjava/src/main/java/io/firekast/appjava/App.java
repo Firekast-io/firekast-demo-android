@@ -8,7 +8,7 @@ import io.firekast.Firekast;
 public class App extends Application {
 
     @Nullable
-    public static String latestStreamId = null;
+    public static String latestStreamId = "jxtr0epbnbpmtgjyn";
 
     @Override
     public void onCreate() {

@@ -66,14 +66,14 @@ class PlayerFragment : Fragment(), FKPlayer.Callback {
     // FKPlayerCallback
     // -----
 
-    override fun onPlayerWillPlay(stream: FKStream, error: FKError?) {
+    override fun onPlayerWillPlay(player: FKPlayer, stream: FKStream, error: FKError?) {
         progressBar.visibility = View.GONE
         error?.let {
             Toast.makeText(this.context, "Error: $it", Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onPlayerStateChanged(state: FKPlayer.State) {
+    override fun onPlayerStateChanged(player: FKPlayer, state: FKPlayer.State) {
         textViewState.text = "$state"
     }
 }
