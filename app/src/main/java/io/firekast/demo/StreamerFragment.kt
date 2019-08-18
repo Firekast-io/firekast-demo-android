@@ -1,17 +1,24 @@
 package io.firekast.demo
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import io.firekast.*
 import kotlinx.android.synthetic.main.fragment_streamer.*
+import java.util.*
 
 class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingCallback {
 
@@ -22,6 +29,8 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
     private lateinit var streamer: FKStreamer
 
     private lateinit var streamStateViewHolder: StreamStateViewHolder
+
+    private val facebookLoginCallbackManager = CallbackManager.Factory.create()
 
     var isLoading: Boolean by observing(false, didSet = {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -62,6 +71,68 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
         streamStateViewHolder.visibility = View.INVISIBLE
         isStreaming = false
         isLoading = false
+
+        /*
+        FACEBOOK: https://developers.facebook.com/docs/live-video-api/
+        Publishing on a User
+            - publish_video
+        Publishing on a Page
+            - publish_pages
+            - manage_pages
+        Publishing on a Group
+            - publish_video
+            - publish_to_groups
+         */
+        facebookRestream.setOnClickListener {
+            facebookProgressBar.visibility = View.VISIBLE
+            facebookRestream.isEnabled = false
+            LoginManager.getInstance().registerCallback(facebookLoginCallbackManager, object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult?) {
+                    GraphRequest(
+                            AccessToken.getCurrentAccessToken(),
+                            "/me",
+                            null,
+                            HttpMethod.GET,
+                            GraphRequest.Callback {
+                                val id = it.jsonObject.optString("id")
+                                if (id.isNullOrEmpty()) {
+                                    restoreUI()
+                                } else {
+                                    GraphRequest(
+                                            AccessToken.getCurrentAccessToken(),
+                                            "/$id/live_videos",
+                                            null,
+                                            HttpMethod.POST,
+                                            GraphRequest.Callback {
+                                                facebookRtmpsUrl.text = it.jsonObject.optString("secure_stream_url")
+                                                restoreUI()
+                                            }
+                                    ).executeAsync()
+                                }
+                            }
+                    ).executeAsync()
+                }
+
+                override fun onCancel() {
+                    restoreUI()
+                }
+
+                override fun onError(error: FacebookException?) {
+                    restoreUI()
+                }
+
+                private fun restoreUI() {
+                    facebookProgressBar.visibility = View.GONE
+                    facebookRestream.isEnabled = true
+                }
+            })
+            LoginManager.getInstance().logIn(this, Arrays.asList("publish_video"))
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        facebookLoginCallbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onClick(p0: View?) {
@@ -70,7 +141,10 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
             isStreaming = false
         } else {
             isLoading = true
-            streamer.createStream { stream: FKStream?, error: FKError? ->
+            val outputs = listOf(facebookRtmpsUrl.text)
+                    .filterNot { TextUtils.isEmpty(it) }
+                    .map { it.toString() }
+            streamer.createStream(outputs) { stream: FKStream?, error: FKError? ->
                 if (error != null) {
                     Toast.makeText(this.context, "Error: $error", Toast.LENGTH_LONG).show()
                     isLoading = false

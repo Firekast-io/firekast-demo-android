@@ -17,6 +17,40 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="StreamId" />
 
+    <Button
+        android:id="@+id/facebookRestream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Restream on Facebook"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStreamId" />
+
+    <TextView
+        android:id="@+id/facebookRtmpsUrl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="right"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/facebookRestream"
+        app:layout_constraintLeft_toRightOf="@+id/facebookRestream"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/facebookRestream"
+        tools:text="https://test.com" />
+
+    <ProgressBar
+        android:id="@+id/facebookProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/facebookRestream"
+        app:layout_constraintRight_toRightOf="@+id/facebookRtmpsUrl"
+        app:layout_constraintTop_toTopOf="@+id/facebookRestream" />
+
     <FrameLayout
         android:id="@+id/fragmentContainer"
         style="?android:attr/progressBarStyle"
@@ -29,7 +63,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewStreamId" />
+        app:layout_constraintTop_toBottomOf="@+id/facebookRestream" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/blockStreamState"

@@ -7,4 +7,7 @@
     <string name="stop_playing">Stop</string>
     <string name="start_playing">Play</string>
     <string name="stream_id">StreamID: %s</string>
+    <!-- FACEBOOK -->
+    <string name="facebook_app_id">replace_here</string>
+    <string name="fb_login_protocol_scheme">replace_here</string>
 </resources>
