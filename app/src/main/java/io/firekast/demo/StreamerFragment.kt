@@ -50,6 +50,7 @@ class StreamerFragment : Fragment(), View.OnClickListener, FKStreamer.StreamingC
 
         cameraFragment = FKCameraFragment.Builder()
                 .setCameraPosition(FKCamera.Position.FRONT)
+                .setCameraScaleType(FKCamera.ScaleType.CENTER_CROP)
                 .build()
         cameraFragment.getCameraAsync { camera, streamer, error ->
             if (error != null) {

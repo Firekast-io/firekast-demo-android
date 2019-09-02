@@ -48,7 +48,9 @@ public class StreamerFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        FKCameraFragment cameraFragment = new FKCameraFragment();
+        FKCameraFragment cameraFragment = new FKCameraFragment.Builder()
+                .setCameraScaleType(FKCamera.ScaleType.CENTER_CROP)
+                .build();
         cameraFragment.getCameraAsync(this);
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.camera_container, cameraFragment)
